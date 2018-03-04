@@ -125,12 +125,12 @@ function _processDataKeys(req, input) {
         var data = req;
         for (var _a = 0, dataPaths_1 = dataPaths; _a < dataPaths_1.length; _a++) {
             var p = dataPaths_1[_a];
-            data = data[p];
-            if (!data) {
+            if (!(p in data)) {
                 data = '';
                 console.error(chalk_1.default.red("unknown data path: [" + p + "] in \"" + dataPath + "\""));
                 break;
             }
+            data = data[p];
         }
         return data;
     });
