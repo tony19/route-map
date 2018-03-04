@@ -1,0 +1,11 @@
+{
+  "name": "route-map",
+  "version": "0.0.1",
+  "description": "Easy Express route setup with maps",
+  "main": "src/index.js",
+  "author": "Tony Trinh <tony19@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^2.3.2"
+  }
+}
