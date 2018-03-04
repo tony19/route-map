@@ -1,5 +1,7 @@
-const chalk = require('chalk');
-const fs = require('fs');
+import chalk from 'chalk';
+import fs from 'fs';
+import { methodsPattern } from './lib/http-methods';
+import { IRouteConfig, RequestHandler } from './lib/route-config';
 
 /**
  * Sets up server routes
@@ -38,36 +40,37 @@ const fs = require('fs');
  *      res.json({success: true});
  *    });
  */
-function setupRoutes(app, routes) {
-  Object.keys(routes).forEach(path => {
-    const route = routes[path];
+export function setupRoutes(app: any, routes: IRouteConfig) {
+  for (const [path, route] of Object.entries(routes)) {
     if (typeof route === 'string') {
       console.debug(chalk.gray(`adding route: GET ${path}`));
       app.get(path, toHandler(route));
 
     } else if (typeof route === 'object') {
-      Object.keys(route).forEach(verb => {
-        verb = verb.toLowerCase();
+      for (let [verb, handler] of Object.entries(route)) {
+        if (methodsPattern.test(verb)) {
+          verb = verb.toLowerCase();
+        }
         if (verb in app && app.hasOwnProperty(verb)) {
           console.debug(chalk.gray(`adding route: ${verb.toUpperCase()} ${path}`));
-          app[verb].call(app, path, toHandler(route[verb]));
+          app[verb].call(app, path, toHandler(<any>handler));
         } else {
           console.warn(chalk.yellow(`ignoring unknown HTTP verb: ${verb}`));
         }
-      });
+      }
 
     } else {
-      console.warn(chalk.yellow(`ignoring unkonwn route config type: ${typeof route} -> ${route}`));
+      console.warn(chalk.yellow(`ignoring unknown route config type: ${typeof route} -> ${route}`));
     }
-  });
+  }
 }
 
-const _handlers = new Set();
-function toHandler(value) {
-  let handler = value;
+const allHandlers: {[key: string]: RequestHandler} = {};
+function toHandler(value: string | RequestHandler): RequestHandler {
+  let handler = value as RequestHandler;
   if (typeof value === 'string') {
-    if (!_handlers[value]) {
-      _handlers[value] = (req, res) => {
+    if (!allHandlers[value]) {
+      allHandlers[value] = (req: any, res: any) => {
         const filename = _processKeys(req, value);
         if (fs.existsSync(filename)) {
           res.json(require(filename));
@@ -75,26 +78,26 @@ function toHandler(value) {
           console.error(chalk.red(`file not found: ${filename}`));
           res.sendStatus(404);
         }
-      }
+      };
     }
-    handler = _handlers[value];
+    handler = allHandlers[value];
   }
   return handler;
 }
 
-function _processKeys(req, input) {
+function _processKeys(req: any, input: string) {
   input = _processParamsKeys(req, input);
   input = _processQueryKeys(req, input);
   return _processDataKeys(req, input);
 }
 
-function _processParamsKeys(req, input) {
+function _processParamsKeys(req: any, input: string) {
   return input.replace(/:(\w+)\b/g, (match, ...groups) => req.params[groups[0]]);
 }
-function _processQueryKeys(req, input) {
+function _processQueryKeys(req: any, input: string) {
   return input.replace(/:\?(\w+)\b/g, (match, ...groups) => req.query[groups[0]]);
 }
-function _processDataKeys(req, input) {
+function _processDataKeys(req: any, input: string) {
   return input.replace(/:\{([^}]+)\}/g, (match, ...groups) => {
     const dataPath = groups[0];
     const dataPaths = dataPath.split('.');
@@ -102,7 +105,7 @@ function _processDataKeys(req, input) {
     for (const p of dataPaths) {
       data = data[p];
       if (!data) {
-        data = ''
+        data = '';
         console.error(chalk.red(`unknown data path: [${p}] in "${dataPath}"`));
         break;
       }
@@ -116,8 +119,8 @@ function _processDataKeys(req, input) {
  * The data is formatted (special keys are replaced) and then converted
  * into a JSON object before being sent.
  */
-function json(strings, ...keys) {
-  return function json(req, res, next) {
+export function json(strings: string[], ...keys: string[]) {
+  return function _json(req: any, res: any) {
     const output = _processKeys(req, strings.join(''));
     res.json(JSON.parse(output));
   };
@@ -128,15 +131,9 @@ function json(strings, ...keys) {
  * The data is formatted (special keys are replaced) and then converted
  * into a JSON object before being sent.
  */
-function text(strings, ...keys) {
-  return function text(req, res, next) {
+export function text(strings: string[], ...keys: string[]) {
+  return function _text(req: any, res: any) {
     const output = _processKeys(req, strings.join(''));
     res.send(output);
   };
 }
-
-module.exports = {
-  setupRoutes,
-  json,
-  text
-};
