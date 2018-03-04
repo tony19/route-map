@@ -103,12 +103,12 @@ function _processDataKeys(req: any, input: string) {
     const dataPaths = dataPath.split('.');
     let data = req;
     for (const p of dataPaths) {
-      data = data[p];
-      if (!data) {
+      if (!(p in data)) {
         data = '';
         console.error(chalk.red(`unknown data path: [${p}] in "${dataPath}"`));
         break;
       }
+      data = data[p];
     }
     return data;
   });
