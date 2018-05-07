@@ -6,10 +6,11 @@
   "author": "Tony Trinh <tony19@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "chalk": "^2.3.2"
+    "winston": "^2.4.2"
   },
   "devDependencies": {
     "@types/node": "^9.4.6",
+    "@types/winston": "^2.3.9",
     "tslint": "^5.9.1",
     "typescript": "^2.8.3"
   },
