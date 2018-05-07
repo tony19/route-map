@@ -15,10 +15,26 @@ describe('resolveDataKeys', () => {
     expect(result).toBe('this/test/hello/index.html');
   });
 
-  it('defaults to empty string for unresolved keys', () => {
+  it('defaults to empty string for nonexistent key', () => {
+    const result = resolveDataKeys(
+      req,
+      'this/test/:{foo.bar.baz}/:{foo.bar.nonexistent}/index.html',
+    );
+    expect(result).toBe('this/test/hello//index.html');
+  });
+
+  it('defaults to empty string for invalid key into primitive', () => {
     const result = resolveDataKeys(
       req,
       'this/test/:{foo.bar.baz}/:{foo.bar.baz.nonexistent}/index.html',
+    );
+    expect(result).toBe('this/test/hello//index.html');
+  });
+
+  it('defaults to empty string for invalid key pointing to object', () => {
+    const result = resolveDataKeys(
+      req,
+      'this/test/:{foo.bar.baz}/:{foo.bar}/index.html',
     );
     expect(result).toBe('this/test/hello//index.html');
   });
