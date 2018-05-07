@@ -1,6 +1,6 @@
 {
   "name": "route-map",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Easy Express route setup with maps",
   "main": "dist/index.js",
   "author": "Tony Trinh <tony19@gmail.com>",
