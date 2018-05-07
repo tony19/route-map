@@ -1,7 +1,9 @@
 import chalk from 'chalk';
 import fs from 'fs';
-import { methodsPattern } from './lib/http-methods';
+import {METHODS} from 'http';
 import { IRouteConfig, RequestHandler } from './lib/route-config';
+
+const methodsPattern = new RegExp(METHODS.join('|'), 'ig');
 
 /**
  * Sets up server routes
