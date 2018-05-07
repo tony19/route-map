@@ -39,3 +39,45 @@ describe('resolveDataKeys', () => {
     expect(result).toBe('this/test/hello//index.html');
   });
 });
+
+describe('resolveParamsKeys', () => {
+  const req = {
+    params: {
+      'foo.bar.baz': 'hello',
+    },
+  };
+
+  it('resolves keys by req.params', () => {
+    const result = resolveParamsKeys(req, 'this/test/:foo.bar.baz/index.html');
+    expect(result).toBe('this/test/hello/index.html');
+  });
+
+  it('defaults to empty string for nonexistent key', () => {
+    const result = resolveParamsKeys(
+      req,
+      'this/test/:foo.bar.baz/:foo.bar.nonexistent/index.html',
+    );
+    expect(result).toBe('this/test/hello//index.html');
+  });
+});
+
+describe('resolveQueryKeys', () => {
+  const req = {
+    query: {
+      'foo.bar.baz': 'hello',
+    },
+  };
+
+  it('resolves keys by req.params', () => {
+    const result = resolveQueryKeys(req, 'this/test/:?foo.bar.baz/index.html');
+    expect(result).toBe('this/test/hello/index.html');
+  });
+
+  it('defaults to empty string for nonexistent key', () => {
+    const result = resolveQueryKeys(
+      req,
+      'this/test/:?foo.bar.baz/:?foo.bar.nonexistent/index.html',
+    );
+    expect(result).toBe('this/test/hello//index.html');
+  });
+});
