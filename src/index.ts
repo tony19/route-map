@@ -55,7 +55,7 @@ export function setupRoutes(app: any, routes: IRouteConfig) {
         }
         if (verb in app && app.hasOwnProperty(verb)) {
           console.debug(chalk.gray(`adding route: ${verb.toUpperCase()} ${path}`));
-          app[verb].call(app, path, toHandler(<any>handler));
+          app[verb].call(app, path, toHandler(handler as any));
         } else {
           console.warn(chalk.yellow(`ignoring unknown HTTP verb: ${verb}`));
         }
