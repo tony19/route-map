@@ -68,7 +68,7 @@ describe('resolveQueryKeys', () => {
     },
   };
 
-  it('resolves keys by req.params', () => {
+  it('resolves keys by req.query', () => {
     const result = resolveQueryKeys(req, 'this/test/:?foo.bar.baz/index.html');
     expect(result).toBe('this/test/hello/index.html');
   });
