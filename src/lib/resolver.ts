@@ -1,5 +1,26 @@
 import logger from '@/lib/logger';
 
+/**
+ * Resolves keys in a given pattern based on properties found
+ * in `req` (http://expressjs.com/en/api.html#req). The keys
+ * can be from:
+ *
+ *   req.query  -->  `:?QUERY_KEY`    ex: ":?utm"
+ *   req.params -->  `:PARAM_KEY`     ex: ":id"
+ *   req        -->  `:{DATA_PATH}`   ex: ":{baseUrl}"
+ *
+ * Example:
+ *  Given:
+ *    req.originalUrl = "http://example.com/2"
+ *    req.params.foo  = "2"
+ *    req.query.q     = "google"
+ *    input = "/:foo/:?q/:{originalUrl}/x"
+ *  Returns:
+ *    "/2/google/http://example.com/2/index.html"
+ * @param req request object
+ * @param input input pattern
+ * @return the input pattern with the keys replaced
+ */
 export function resolveKeys(req: any, input: string) {
   input = resolveParamsKeys(req, input);
   input = resolveQueryKeys(req, input);
@@ -15,9 +36,9 @@ export function resolveKeys(req: any, input: string) {
  *    req.originalUrl = "http://example.com/2/apple/index.html"
  *    req.params.foo  = "2"
  *    req.params.bar  = "apple"
- *    input = "http://example.com/:foo/:bar/index.html"
+ *    input = "/:foo/:bar/index.html"
  *  Returns:
- *    "http://example.com/2/apple/index.html"
+ *    "/2/apple/index.html"
  * @param req request object
  * @param input input pattern
  * @return the input pattern with the param-keys replaced by param-values
@@ -28,23 +49,37 @@ export function resolveParamsKeys(req: any, input: string) {
 
 /**
  * Resolves `:?QUERY_KEY` strings in a given pattern based on
- * `req.params` (http://expressjs.com/en/api.html#req.query)
+ * `req.query` (http://expressjs.com/en/api.html#req.query)
  *
  * Example:
  *  Given:
- *    req.params.foo = "2"
- *    req.params.bar = "apple"
- *    input = "http://example.com/:foo/:bar/index.html"
+ *    req.query.foo = "2"
+ *    req.query.bar = "apple"
+ *    input = "/:foo/:bar/index.html"
  *  Returns:
- *    "http://example.com/2/apple/index.html"
+ *    "/2/apple/index.html"
  * @param req request object
  * @param input input pattern
- * @return the input pattern with the param-keys replaced by param-values
+ * @return the input pattern with the query-keys replaced by query-values
  */
 export function resolveQueryKeys(req: any, input: string) {
   return input.replace(/:\?([^\/&?]+)/g, (match, ...groups) => req.query[groups[0]] || '');
 }
 
+/**
+ * Resolves `:{DATA_KEY}` strings in a given pattern based on
+ * properties of `req` (http://expressjs.com/en/api.html#req)
+ *
+ * Example:
+ *  Given:
+ *    req.baseUrl = "http://example.com"
+ *    input = ":{baseUrl}/index.html"
+ *  Returns:
+ *    "http://example.com/index.html"
+ * @param req request object
+ * @param input input pattern
+ * @return the input pattern with the data-keys replaced by data-values
+ */
 export function resolveDataKeys(req: any, input: string) {
   return input.replace(/:\{([^}]+)\}/g, (match, ...groups) => {
     const dataPath = groups[0];
