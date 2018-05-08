@@ -81,3 +81,28 @@ describe('resolveQueryKeys', () => {
     expect(result).toBe('this/test/hello//index.html');
   });
 });
+
+describe('resolveKeys', () => {
+  const req = {
+    a: { b: 200 },
+    params: {
+      'foo.bar.baz': 'hello',
+    },
+    query: {
+      'baz.qux': 'world',
+    },
+  };
+
+  it('resolves keys by req.params and req.query', () => {
+    const result = resolveKeys(req, 'this/test/:foo.bar.baz/:?baz.qux/index:{a.b}.html');
+    expect(result).toBe('this/test/hello/world/index200.html');
+  });
+
+  it('defaults to empty string for nonexistent params key', () => {
+    const result = resolveKeys(
+      req,
+      'this/test/:foo.bar.baz/:?foo.bar.nonexistent/index.html',
+    );
+    expect(result).toBe('this/test/hello//index.html');
+  });
+});
