@@ -23,7 +23,7 @@ export function resolveKeys(req: any, input: string) {
  * @return the input pattern with the param-keys replaced by param-values
  */
 export function resolveParamsKeys(req: any, input: string) {
-  return input.replace(/:([^\/&?]+)/g, (match, ...groups) => req.params[groups[0]] || '');
+  return input.replace(/:([^{}\/&?]+)/g, (match, ...groups) => req.params[groups[0]] || '');
 }
 
 /**
