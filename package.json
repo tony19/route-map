@@ -22,6 +22,6 @@
   "scripts": {
     "build": "tsc",
     "lint": "tslint src/**/*.ts test/**/*.ts",
-    "test": "jest"
+    "test": "jest --verbose"
   }
 }
