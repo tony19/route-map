@@ -20,7 +20,7 @@
     "typescript": "^2.8.3"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "npm run clean && tsc",
     "clean": "rm -rf dist",
     "lint": "tslint src/**/*.ts test/**/*.ts",
     "test": "jest --verbose"
