@@ -93,6 +93,11 @@ describe('resolveKeys', () => {
     },
   };
 
+  it('resolves empty string for empty-string input', () => {
+    const result = resolveKeys(req, '');
+    expect(result).toBe('');
+  });
+
   it('resolves keys by req.params and req.query', () => {
     const result = resolveKeys(req, 'this/test/:foo.bar.baz/:?baz.qux/index:{a.b}.html');
     expect(result).toBe('this/test/hello/world/index200.html');
