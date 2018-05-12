@@ -22,6 +22,9 @@ import logger from '@/lib/logger';
  * @return the input pattern with the keys replaced
  */
 export function resolveKeys(req: any, input: string) {
+  if (!input) {
+    return '';
+  }
   input = resolveParamsKeys(req, input);
   input = resolveQueryKeys(req, input);
   return resolveDataKeys(req, input);
