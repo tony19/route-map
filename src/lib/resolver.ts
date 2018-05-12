@@ -44,10 +44,16 @@ export function resolveKeys(req: any, input: string) {
  *    "/2/apple/index.html"
  * @param req request object
  * @param input input pattern
- * @return the input pattern with the param-keys replaced by param-values
+ * @returns the input pattern with the param-keys replaced by param-values
  */
 export function resolveParamsKeys(req: any, input: string) {
-  return input.replace(/:([^{}\/&?]+)/g, (match, ...groups) => req.params[groups[0]] || '');
+  return input.replace(/:([^{}\/&?]+)/g, (match, ...groups) => {
+    const key = groups[0];
+    if (!(key in req.params)) {
+      logger.error(`unknown param key: ${key}`);
+    }
+    return req.params[key] || '';
+  });
 }
 
 /**
@@ -66,7 +72,13 @@ export function resolveParamsKeys(req: any, input: string) {
  * @return the input pattern with the query-keys replaced by query-values
  */
 export function resolveQueryKeys(req: any, input: string) {
-  return input.replace(/:\?([^\/&?]+)/g, (match, ...groups) => req.query[groups[0]] || '');
+  return input.replace(/:\?([^\/&?]+)/g, (match, ...groups) => {
+    const key = groups[0];
+    if (!(key in req.query)) {
+      logger.error(`unknown query key: ${key}`);
+    }
+    return req.query[key] || '';
+  });
 }
 
 /**
