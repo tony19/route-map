@@ -6,13 +6,12 @@
   "author": "Tony Trinh <tony19@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "winston": "^2.4.2"
+    "chalk": "^2.4.1",
     "module-alias": "^2.0.6"
   },
   "devDependencies": {
     "@types/jest": "^22.2.3",
     "@types/node": "^9.4.6",
-    "@types/winston": "^2.3.9",
     "jest": "^22.4.3",
     "jest-serializer-vue": "^1.0.0",
     "jest-transform-stub": "^1.0.0",

@@ -1,17 +1,26 @@
-import winston from 'winston';
+import chalk from 'chalk';
 
-const config: any = (winston as any)['config']; // tslint:disable-line:no-string-literal
-const logger = new ((winston as any)['Logger']) ({ // tslint:disable-line:no-string-literal
-  transports: [
-    new (winston.transports.Console) ({
-      formatter(options) {
-        // - Return string will be passed to logger.
-        // - Optionally, use options.colorize(options.level, <string>) to
-        //   colorize output based on the log level.
-        return config.colorize(options.level, `${options.level}: ${options.message}`);
-      },
-    }),
-  ],
-});
+class Logger {
+  public log(msg: string) {
+    console.log(msg);
+  }
 
+  public debug(msg: string) {
+    this.log(chalk.gray(msg));
+  }
+
+  public info(msg: string) {
+    this.log(chalk.white(msg));
+  }
+
+  public warn(msg: string) {
+    this.log(chalk.yellow(msg));
+  }
+
+  public error(msg: string) {
+    this.log(chalk.red(msg));
+  }
+}
+
+const logger = new Logger();
 export default logger;
