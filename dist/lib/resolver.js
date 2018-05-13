@@ -51,7 +51,7 @@ exports.resolveKeys = resolveKeys;
  * @returns the input pattern with the param-keys replaced by param-values
  */
 function resolveParamsKeys(req, input) {
-    return input.replace(/:([A-Za-z0-9_]+)\b/g, function (match) {
+    return input.replace(/:(\w+)\b/g, function (match) {
         var groups = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             groups[_i - 1] = arguments[_i];
