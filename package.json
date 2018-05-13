@@ -7,6 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "winston": "^2.4.2"
+    "module-alias": "^2.0.6"
   },
   "devDependencies": {
     "@types/jest": "^22.2.3",
@@ -24,5 +25,8 @@
     "clean": "rm -rf dist",
     "lint": "tslint src/**/*.ts test/**/*.ts",
     "test": "jest --verbose"
+  },
+  "_moduleAliases": {
+    "@": "dist"
   }
 }
