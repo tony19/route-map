@@ -47,7 +47,7 @@ export function resolveKeys(req: any, input: string) {
  * @returns the input pattern with the param-keys replaced by param-values
  */
 export function resolveParamsKeys(req: any, input: string) {
-  return input.replace(/:([^{}\/&?]+)/g, (match, ...groups) => {
+  return input.replace(/:(\w+)\b/g, (match, ...groups) => {
     const key = groups[0];
     if (!(key in req.params)) {
       logger.error(`unknown param key: ${key}`);
