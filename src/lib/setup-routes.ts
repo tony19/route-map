@@ -41,12 +41,11 @@ import { METHODS } from 'http';
  *    });
  */
 export function setupRoutes(app: any, routes: IRouteConfig) {
-  for (const [path, route] of Object.entries(routes)) {
+  for (let [path, route] of Object.entries(routes)) {
     if (typeof route === 'string') {
-      logger.debug(`adding route: GET ${path}`);
-      app.get(path, toRequestHandler(route));
-
-    } else if (typeof route === 'object') {
+      route = { get: path };
+    }
+    if (typeof route === 'object') {
       const methodsPattern = new RegExp(METHODS.join('|'), 'ig');
       for (let [verb, handler] of Object.entries(route)) {
         if (methodsPattern.test(verb)) {
