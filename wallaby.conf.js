@@ -4,10 +4,11 @@ module.exports = function () {
     files: [
       'tsconfig.json',
       'src/**/*.ts',
-      '!test/**/*.ts'
+      'test/**/*.ts',
+      '!test/**/*.spec.ts'
     ],
 
-    tests: ['test/**/*.ts'],
+    tests: ['test/**/*.spec.ts'],
 
     env: {
       type: 'node',

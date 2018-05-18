@@ -18,6 +18,6 @@ module.exports = {
     'jest-serializer-vue'
   ],
   testMatch: [
-    '<rootDir>/(test/unit/**/*.spec.(ts|tsx|js)|**/__tests__/*.(ts|tsx|js))'
+    '<rootDir>/(test/**/*.spec.(ts|tsx|js)|**/__tests__/*.(ts|tsx|js))'
   ]
 }
