@@ -6,7 +6,7 @@
   "author": "Tony Trinh <tony19@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "chalk": "^2.4.1",
+    "chalk": "^5.0.0",
     "module-alias": "^2.0.6"
   },
   "devDependencies": {
