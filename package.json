@@ -15,7 +15,7 @@
     "@types/node": "^9.4.6",
     "express": "^4.16.3",
     "jest": "^24.0.0",
-    "jest-extended": "^0.7.1",
+    "jest-extended": "^4.0.0",
     "jest-serializer-vue": "^1.0.0",
     "jest-transform-stub": "^1.0.0",
     "ts-jest": "^22.4.5",
